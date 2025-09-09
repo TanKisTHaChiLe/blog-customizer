@@ -19,7 +19,6 @@ export const Option = (props: OptionProps) => {
 		onClick,
 	} = props;
 
-
 	const optionRef = useRef<HTMLLIElement>(null);
 
 	const handleClick =
@@ -35,7 +34,6 @@ export const Option = (props: OptionProps) => {
 	});
 
 	return (
-		
 		<li
 			className={clsx(styles.option, styles[optionClassName || ''])}
 			value={value}

@@ -23,40 +23,52 @@ const domNode = document.getElementById('root') as HTMLDivElement;
 const root = createRoot(domNode);
 
 const App = () => {
-
-	const [formIsOpen, setFormIsOpen] = useState(false)
-
+	const [formIsOpen, setFormIsOpen] = useState(false);
+	const [fortmState, setFormState] = useState<ArticleStateType>(defaultArticleState);
 	const [articleState, setArticleState] =
 		useState<ArticleStateType>(defaultArticleState);
-
-	const updateArticleState = (key: keyof ArticleStateType, value: OptionType) => {
-		setArticleState(prev => ({
+	const updateArticleState = (
+		key: keyof ArticleStateType,
+		value: OptionType
+	) => {
+		setArticleState((prev) => ({
 			...prev,
-			[key]: value
-		}))
-	}
-
+			[key]: value,
+		}));
+	};
 	const resetValue = () => {
 		setArticleState(defaultArticleState);
-	}
-
+		setFormState(defaultArticleState)
+	};
 	const handleOpen = () => {
-		setFormIsOpen(!formIsOpen)
-	}
+		setFormIsOpen(!formIsOpen);
+	};
 
 	return (
 		<main
 			className={clsx(styles.main)}
 			style={
 				{
-					'--font-family': defaultArticleState.fontFamilyOption.value,
-					'--font-size': defaultArticleState.fontSizeOption.value,
-					'--font-color': defaultArticleState.fontColor.value,
-					'--container-width': defaultArticleState.contentWidth.value,
-					'--bg-color': defaultArticleState.backgroundColor.value,
+					'--font-family': fortmState.fontFamilyOption.value,
+					'--font-size': fortmState.fontSizeOption.value,
+					'--font-color': fortmState.fontColor.value,
+					'--container-width': fortmState.contentWidth.value,
+					'--bg-color': fortmState.backgroundColor.value,
 				} as CSSProperties
 			}>
-			<ArticleParamsForm />
+			<ArticleParamsForm
+				isOpen={formIsOpen}
+				handleOpen={handleOpen}
+				articleState={articleState}
+				updateArticleState={updateArticleState}
+				onReset={resetValue}
+				fontFamilyOptions={fontFamilyOptions}
+				fontColors={fontColors}
+				backgroundColors={backgroundColors}
+				fontSizeOptions={fontSizeOptions}
+				contentWidthArr={contentWidthArr}
+				setFormState={setFormState}
+			/>
 			<Article />
 		</main>
 	);

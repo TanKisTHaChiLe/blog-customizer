@@ -1,6 +1,15 @@
 import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
-import { ArticleStateType, OptionType } from 'src/constants/articleProps';
+import {
+	ArticleStateType,
+	OptionType,
+	fontFamilyOptions,
+	fontColors,
+	backgroundColors,
+	contentWidthArr,
+	fontSizeOptions,
+	defaultArticleState,
+} from 'src/constants/articleProps';
 import { useState } from 'react';
 import clsx from 'clsx';
 import styles from './ArticleParamsForm.module.scss';
@@ -8,14 +17,6 @@ import { Select } from 'src/ui/select';
 import { RadioGroup } from 'src/ui/radio-group';
 import { Text } from 'src/ui/text';
 import { Separator } from 'src/ui/separator';
-import {
-	fontFamilyOptions,
-	fontColors,
-	backgroundColors,
-	contentWidthArr,
-	fontSizeOptions,
-	defaultArticleState,
-} from '../../constants/articleProps';
 
 type ArticleParamsFormProps = {
 	isOpen: boolean;
@@ -24,60 +25,45 @@ type ArticleParamsFormProps = {
 	updateArticleState: (key: keyof ArticleStateType, value: OptionType) => void;
 	onReset: () => void;
 	fontFamilyOptions: OptionType[];
-	fontColors:OptionType[];
-	backgroundColors:OptionType[];
-	contentWidthArr:OptionType[];
-	fontSizeOptions:OptionType[];
-}
+	fontColors: OptionType[];
+	backgroundColors: OptionType[];
+	contentWidthArr: OptionType[];
+	fontSizeOptions: OptionType[];
+	setFormState: React.Dispatch<React.SetStateAction<{
+        fontFamilyOption: OptionType;
+        fontColor: OptionType;
+        backgroundColor: OptionType;
+        contentWidth: OptionType;
+        fontSizeOption: OptionType;
+    }>>
+};
 
-export const ArticleParamsForm = () => {
-	const [isOpen, setIsOpen] = useState(false);
-
-	function handleArrowClick() {
-		setIsOpen(!isOpen);
-	}
+export const ArticleParamsForm =  ({
+  isOpen,
+  handleOpen,
+  articleState,
+  updateArticleState,
+  onReset,
+  fontFamilyOptions,
+  fontColors,
+  backgroundColors,
+  fontSizeOptions,
+  contentWidthArr,
+  setFormState
+}: ArticleParamsFormProps) => {
 
 	function handleSubmit(e: React.MouseEvent<HTMLButtonElement>): void {
 		e.preventDefault();
-		console.log(
-			fontSelected,
-			sizeSelected,
-			colorTextSelected,
-			colorBackgroundSelected,
-			widthSelected
-		);
+		setFormState(articleState)
 	}
 
 	function handleReset() {
-		setFontSelected(defaultArticleState.fontFamilyOption);
-		setSizeSelected(defaultArticleState.fontSizeOption);
-		setColorTextSelected(defaultArticleState.fontColor);
-		setcolorBackgroundSelected(defaultArticleState.backgroundColor);
-		setwidthSelected(defaultArticleState.contentWidth);
+		onReset();
 	}
-
-	const [fontSelected, setFontSelected] = useState(
-		defaultArticleState.fontFamilyOption
-	);
-	const [sizeSelected, setSizeSelected] = useState(
-		defaultArticleState.fontSizeOption
-	);
-
-	const [colorTextSelected, setColorTextSelected] = useState(
-		defaultArticleState.fontColor
-	);
-
-	const [colorBackgroundSelected, setcolorBackgroundSelected] = useState(
-		defaultArticleState.backgroundColor
-	);
-
-	const [widthSelected, setwidthSelected] = useState(
-		defaultArticleState.contentWidth
-	);
 
 	return (
 		<>
-			<ArrowButton isOpen={isOpen} onClick={handleArrowClick} />
+			<ArrowButton isOpen={isOpen} onClick={handleOpen} />
 			<aside
 				className={clsx(styles.container, { [styles.container_open]: isOpen })}>
 				<form className={styles.form}>
@@ -92,34 +78,34 @@ export const ArticleParamsForm = () => {
 					</Text>
 
 					<Select
-						selected={fontSelected}
-						onChange={setFontSelected}
+						selected={articleState.fontFamilyOption}
+						onChange={(option) => updateArticleState('fontFamilyOption', option)}
 						options={fontFamilyOptions}
 						title='шрифт'></Select>
 
 					<RadioGroup
-						selected={sizeSelected}
-						onChange={setSizeSelected}
+						selected={articleState.fontSizeOption}
+						onChange={(option) => updateArticleState('fontSizeOption', option)}
 						name='radio'
 						options={fontSizeOptions}
 						title='размер шрифта'></RadioGroup>
 
 					<Select
-						selected={colorTextSelected}
-						onChange={setColorTextSelected}
+						selected={articleState.fontColor}
+						onChange={(option) => updateArticleState('fontColor', option)}
 						options={fontColors}
 						title='цвет шрифта'></Select>
 					<Separator />
 
 					<Select
-						selected={colorBackgroundSelected}
-						onChange={setcolorBackgroundSelected}
+						selected={articleState.backgroundColor}
+						onChange={(option) => updateArticleState('backgroundColor', option)}
 						options={backgroundColors}
 						title='цвет фона'></Select>
 
 					<Select
-						selected={widthSelected}
-						onChange={setwidthSelected}
+						selected={articleState.contentWidth}
+						onChange={(option) => updateArticleState('contentWidth', option)}
 						options={contentWidthArr}
 						title='Ширина контента'></Select>
 
