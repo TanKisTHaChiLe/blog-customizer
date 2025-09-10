@@ -3,27 +3,17 @@ import { Button } from 'src/ui/button';
 import {
 	ArticleStateType,
 	OptionType,
-	fontFamilyOptions,
-	fontColors,
-	backgroundColors,
-	contentWidthArr,
-	fontSizeOptions,
 	defaultArticleState,
 } from 'src/constants/articleProps';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import clsx from 'clsx';
 import styles from './ArticleParamsForm.module.scss';
 import { Select } from 'src/ui/select';
 import { RadioGroup } from 'src/ui/radio-group';
 import { Text } from 'src/ui/text';
 import { Separator } from 'src/ui/separator';
-
+import { useClickOutside } from 'src/hooks';
 type ArticleParamsFormProps = {
-	isOpen: boolean;
-	handleOpen: () => void;
-	formState: ArticleStateType;
-	updateArticleState: (key: keyof ArticleStateType, value: OptionType) => void;
-	onReset: () => void;
 	fontFamilyOptions: OptionType[];
 	fontColors: OptionType[];
 	backgroundColors: OptionType[];
@@ -41,11 +31,6 @@ type ArticleParamsFormProps = {
 };
 
 export const ArticleParamsForm = ({
-	isOpen,
-	handleOpen,
-	formState,
-	updateArticleState,
-	onReset,
 	fontFamilyOptions,
 	fontColors,
 	backgroundColors,
@@ -53,28 +38,54 @@ export const ArticleParamsForm = ({
 	contentWidthArr,
 	setArticleState,
 }: ArticleParamsFormProps) => {
+	const [formIsOpen, setFormIsOpen] = useState(false);
+	const [formState, setFormState] =
+		useState<ArticleStateType>(defaultArticleState);
+
+	const formRef = useRef<HTMLDivElement | null>(null);
+
+	useClickOutside(
+		formRef,
+		() => {
+			if (formIsOpen) {
+				setFormIsOpen(false);
+			}
+		},
+		formIsOpen
+	);
+
 	function handleSubmit(e: React.MouseEvent<HTMLButtonElement>): void {
 		e.preventDefault();
 		setArticleState(formState);
 	}
 
-	function handleReset() {
-		onReset();
-	}
+	const updateArticleState = (
+		key: keyof ArticleStateType,
+		value: OptionType
+	) => {
+		setFormState((prev) => ({
+			...prev,
+			[key]: value,
+		}));
+	};
+	const resetValue = () => {
+		setArticleState(defaultArticleState);
+		setFormState(defaultArticleState);
+	};
+	const handleOpen = () => {
+		console.log(formIsOpen);
+		setFormIsOpen(!formIsOpen);
+	};
 
 	return (
-		<>
-			<ArrowButton isOpen={isOpen} onClick={handleOpen} />
+		<div ref={formRef}>
+			<ArrowButton isOpen={formIsOpen} onClick={handleOpen} />
 			<aside
-				className={clsx(styles.container, { [styles.container_open]: isOpen })}>
+				className={clsx(styles.container, {
+					[styles.container_open]: formIsOpen,
+				})}>
 				<form className={styles.form}>
-					<Text
-						as='h1'
-						size={31}
-						weight={800}
-						uppercase
-						dynamicLite
-						align='left'>
+					<Text as='h1' size={31} weight={800} uppercase align='left'>
 						Задайте параметры
 					</Text>
 
@@ -117,7 +128,7 @@ export const ArticleParamsForm = ({
 							title='Сбросить'
 							htmlType='reset'
 							type='clear'
-							onClick={handleReset}
+							onClick={resetValue}
 						/>
 						<Button
 							title='Применить'
@@ -128,6 +139,6 @@ export const ArticleParamsForm = ({
 					</div>
 				</form>
 			</aside>
-		</>
+		</div>
 	);
 };
