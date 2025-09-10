@@ -36,6 +36,7 @@ export const Option = (props: OptionProps) => {
 			<input
 				className={styles.input}
 				type='radio'
+				checked={isChecked}
 				name={groupName}
 				id={inputId}
 				value={value}

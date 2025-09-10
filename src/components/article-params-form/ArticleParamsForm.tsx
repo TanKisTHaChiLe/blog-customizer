@@ -21,7 +21,7 @@ import { Separator } from 'src/ui/separator';
 type ArticleParamsFormProps = {
 	isOpen: boolean;
 	handleOpen: () => void;
-	articleState: ArticleStateType;
+	formState: ArticleStateType;
 	updateArticleState: (key: keyof ArticleStateType, value: OptionType) => void;
 	onReset: () => void;
 	fontFamilyOptions: OptionType[];
@@ -29,32 +29,33 @@ type ArticleParamsFormProps = {
 	backgroundColors: OptionType[];
 	contentWidthArr: OptionType[];
 	fontSizeOptions: OptionType[];
-	setFormState: React.Dispatch<React.SetStateAction<{
-        fontFamilyOption: OptionType;
-        fontColor: OptionType;
-        backgroundColor: OptionType;
-        contentWidth: OptionType;
-        fontSizeOption: OptionType;
-    }>>
+	setArticleState: React.Dispatch<
+		React.SetStateAction<{
+			fontFamilyOption: OptionType;
+			fontColor: OptionType;
+			backgroundColor: OptionType;
+			contentWidth: OptionType;
+			fontSizeOption: OptionType;
+		}>
+	>;
 };
 
-export const ArticleParamsForm =  ({
-  isOpen,
-  handleOpen,
-  articleState,
-  updateArticleState,
-  onReset,
-  fontFamilyOptions,
-  fontColors,
-  backgroundColors,
-  fontSizeOptions,
-  contentWidthArr,
-  setFormState
+export const ArticleParamsForm = ({
+	isOpen,
+	handleOpen,
+	formState,
+	updateArticleState,
+	onReset,
+	fontFamilyOptions,
+	fontColors,
+	backgroundColors,
+	fontSizeOptions,
+	contentWidthArr,
+	setArticleState,
 }: ArticleParamsFormProps) => {
-
 	function handleSubmit(e: React.MouseEvent<HTMLButtonElement>): void {
 		e.preventDefault();
-		setFormState(articleState)
+		setArticleState(formState);
 	}
 
 	function handleReset() {
@@ -78,33 +79,35 @@ export const ArticleParamsForm =  ({
 					</Text>
 
 					<Select
-						selected={articleState.fontFamilyOption}
-						onChange={(option) => updateArticleState('fontFamilyOption', option)}
+						selected={formState.fontFamilyOption}
+						onChange={(option) =>
+							updateArticleState('fontFamilyOption', option)
+						}
 						options={fontFamilyOptions}
 						title='шрифт'></Select>
 
 					<RadioGroup
-						selected={articleState.fontSizeOption}
+						selected={formState.fontSizeOption}
 						onChange={(option) => updateArticleState('fontSizeOption', option)}
 						name='radio'
 						options={fontSizeOptions}
 						title='размер шрифта'></RadioGroup>
 
 					<Select
-						selected={articleState.fontColor}
+						selected={formState.fontColor}
 						onChange={(option) => updateArticleState('fontColor', option)}
 						options={fontColors}
 						title='цвет шрифта'></Select>
 					<Separator />
 
 					<Select
-						selected={articleState.backgroundColor}
+						selected={formState.backgroundColor}
 						onChange={(option) => updateArticleState('backgroundColor', option)}
 						options={backgroundColors}
 						title='цвет фона'></Select>
 
 					<Select
-						selected={articleState.contentWidth}
+						selected={formState.contentWidth}
 						onChange={(option) => updateArticleState('contentWidth', option)}
 						options={contentWidthArr}
 						title='Ширина контента'></Select>

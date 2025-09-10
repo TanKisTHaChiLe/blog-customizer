@@ -24,21 +24,23 @@ const root = createRoot(domNode);
 
 const App = () => {
 	const [formIsOpen, setFormIsOpen] = useState(false);
-	const [fortmState, setFormState] = useState<ArticleStateType>(defaultArticleState);
+	const [formState, setFormState] =
+		useState<ArticleStateType>(defaultArticleState);
 	const [articleState, setArticleState] =
 		useState<ArticleStateType>(defaultArticleState);
+
 	const updateArticleState = (
 		key: keyof ArticleStateType,
 		value: OptionType
 	) => {
-		setArticleState((prev) => ({
+		setFormState((prev) => ({
 			...prev,
 			[key]: value,
 		}));
 	};
 	const resetValue = () => {
 		setArticleState(defaultArticleState);
-		setFormState(defaultArticleState)
+		setFormState(defaultArticleState);
 	};
 	const handleOpen = () => {
 		setFormIsOpen(!formIsOpen);
@@ -49,17 +51,17 @@ const App = () => {
 			className={clsx(styles.main)}
 			style={
 				{
-					'--font-family': fortmState.fontFamilyOption.value,
-					'--font-size': fortmState.fontSizeOption.value,
-					'--font-color': fortmState.fontColor.value,
-					'--container-width': fortmState.contentWidth.value,
-					'--bg-color': fortmState.backgroundColor.value,
+					'--font-family': articleState.fontFamilyOption.value,
+					'--font-size': articleState.fontSizeOption.value,
+					'--font-color': articleState.fontColor.value,
+					'--container-width': articleState.contentWidth.value,
+					'--bg-color': articleState.backgroundColor.value,
 				} as CSSProperties
 			}>
 			<ArticleParamsForm
 				isOpen={formIsOpen}
 				handleOpen={handleOpen}
-				articleState={articleState}
+				formState={formState}
 				updateArticleState={updateArticleState}
 				onReset={resetValue}
 				fontFamilyOptions={fontFamilyOptions}
@@ -67,7 +69,7 @@ const App = () => {
 				backgroundColors={backgroundColors}
 				fontSizeOptions={fontSizeOptions}
 				contentWidthArr={contentWidthArr}
-				setFormState={setFormState}
+				setArticleState={setArticleState}
 			/>
 			<Article />
 		</main>
