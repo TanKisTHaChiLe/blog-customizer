@@ -4,6 +4,11 @@ import {
 	ArticleStateType,
 	OptionType,
 	defaultArticleState,
+	fontFamilyOptions,
+	fontColors,
+	backgroundColors,
+	fontSizeOptions,
+	contentWidthArr,
 } from 'src/constants/articleProps';
 import { useState, useRef } from 'react';
 import clsx from 'clsx';
@@ -14,11 +19,6 @@ import { Text } from 'src/ui/text';
 import { Separator } from 'src/ui/separator';
 import { useClickOutside } from 'src/hooks';
 type ArticleParamsFormProps = {
-	fontFamilyOptions: OptionType[];
-	fontColors: OptionType[];
-	backgroundColors: OptionType[];
-	contentWidthArr: OptionType[];
-	fontSizeOptions: OptionType[];
 	setArticleState: React.Dispatch<
 		React.SetStateAction<{
 			fontFamilyOption: OptionType;
@@ -31,11 +31,6 @@ type ArticleParamsFormProps = {
 };
 
 export const ArticleParamsForm = ({
-	fontFamilyOptions,
-	fontColors,
-	backgroundColors,
-	fontSizeOptions,
-	contentWidthArr,
 	setArticleState,
 }: ArticleParamsFormProps) => {
 	const [formIsOpen, setFormIsOpen] = useState(false);
