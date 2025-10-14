@@ -18,6 +18,7 @@ export const Option = (props: OptionProps) => {
 		option: { value, title, optionClassName, className },
 		onClick,
 	} = props;
+
 	const optionRef = useRef<HTMLLIElement>(null);
 
 	const handleClick =
